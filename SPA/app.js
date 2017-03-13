@@ -34,8 +34,8 @@ app.get('/', function(req, res, next) {
   var loginConfig = {
     auth0Domain: tenantConfig.auth0Domain,
     auth0ClientId: tenantConfig.auth0ClientId,
-    auth0Logo: tenantConfig.logo,
-    auth0ThemeColor: tenantConfig.themeColor,
+    auth0Logo: tenantConfig.auth0Logo,
+    auth0ThemeColor: tenantConfig.auth0ThemeColor,
   };
   res.render('index', loginConfig);
 
