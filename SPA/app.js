@@ -8,13 +8,14 @@ var _         = require('lodash');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.disable('etag');
 
 app.use(logger('dev'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 function getTenantFromDomain(host){
-  var re = new RegExp(/(\w+)-yourcompany.com$/);
+  var re = new RegExp(/(\w+)-adutta.com$/);
   var matches = host.match(re);
   if (matches && matches.length > 1){
     return matches[1];
@@ -32,7 +33,9 @@ app.get('/', function(req, res, next) {
 
   var loginConfig = {
     auth0Domain: tenantConfig.auth0Domain,
-    auth0ClientId: tenantConfig.auth0ClientId
+    auth0ClientId: tenantConfig.auth0ClientId,
+    auth0Logo: tenantConfig.logo,
+    auth0ThemeColor: tenantConfig.themeColor,
   };
   res.render('index', loginConfig);
 

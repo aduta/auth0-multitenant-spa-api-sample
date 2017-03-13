@@ -1,13 +1,13 @@
 extends layout
 
-block content  
+block content
   .login-box
-    h1 Auth0 Multitenant Sample
+    h1 Auth0 TNL/NGN
     p Login to start using the resources available for your tenant
     br
     button(onclick="signin()") Login
   .logged-in-box(style="display:none;")
-    h4 Welcome 
+    h4 Welcome
       span.nickname
     .panel.panel-primary
       .panel-heading Your profile:
@@ -21,9 +21,16 @@ block content
 
   script.
     var API_BASE_URL = 'http://' + window.location.hostname + ':' + 8080;
-    
-    var lock = new Auth0Lock('#{auth0ClientId}','#{auth0Domain}');
-    
+
+    var options = {
+      theme: {
+        logo: '#{auth0Logo}',
+        primaryColor: '#{auth0ThemeColor}'
+      }
+    };
+
+    var lock = new Auth0Lock('#{auth0ClientId}','#{auth0Domain}', options);
+
     function signin() {
       lock.show();
     }
@@ -58,7 +65,7 @@ block content
       }).then(function(data){
         localStorage.removeItem('id_token');
         $('.login-box').show();
-        $('.logged-in-box').hide(); 
+        $('.logged-in-box').hide();
       }).fail(function(err){
         console.log('failed to logout',err);
       });
@@ -94,7 +101,7 @@ block content
          } else {
           //initial login
           localStorage.setItem('id_token', hash.id_token);
-          reloadProfile(hash.id_token);           
+          reloadProfile(hash.id_token);
         }
       } else {
         //handle case of page refreshed by already logged-in user
