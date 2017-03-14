@@ -26,10 +26,29 @@ block content
       theme: {
         logo: '#{auth0Logo}',
         primaryColor: '#{auth0ThemeColor}'
+      },
+      languageDictionary: {
+        emailInputPlaceholder: "something@youremail.com",
+        title: "Log me in"
       }
     };
 
     var lock = new Auth0Lock('#{auth0ClientId}','#{auth0Domain}', options);
+
+    // Listening for the authenticated event
+    lock.on("authenticated", function(authResult) {
+      // Use the token in authResult to getUserInfo() and save it to localStorage
+      lock.getUserInfo(authResult.accessToken, function(error, profile) {
+        if (error) {
+          // Handle error
+          return;
+        }
+
+        localStorage.setItem('accessToken', authResult.accessToken);
+        localStorage.setItem('profile', JSON.stringify(profile));
+        showLoggedInUser(profile);
+      });
+    });
 
     function signin() {
       lock.show();
@@ -89,23 +108,4 @@ block content
       });
     }
 
-    $(document).ready(function() {
-      var hash = lock.parseHash();
-      //handle redirection from iDP after login
-      if (hash) {
-        window.location.hash = ''; //clean hash
-        console.log('hash',hash);
-        if (hash.error) {
-          console.log('Error in parsed hash ' + hash.error );
-          logout
-         } else {
-          //initial login
-          localStorage.setItem('id_token', hash.id_token);
-          reloadProfile(hash.id_token);
-        }
-      } else {
-        //handle case of page refreshed by already logged-in user
-        reloadProfile();
-      }
 
-    });
