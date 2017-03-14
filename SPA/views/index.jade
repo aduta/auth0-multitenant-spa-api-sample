@@ -83,10 +83,16 @@ block content
         url: 'https://#{auth0Domain}/v2/logout'
       }).then(function(data){
         localStorage.removeItem('id_token');
+        console.log("Removing profile from local storage");
+        localStorage.removeItem('profile');
         $('.login-box').show();
         $('.logged-in-box').hide();
       }).fail(function(err){
+        localStorage.removeItem('profile');
+        localStorage.removeItem('id_token');
         console.log('failed to logout',err);
+        $('.login-box').show();
+        $('.logged-in-box').hide();
       });
     }
 
@@ -108,4 +114,10 @@ block content
       });
     }
 
+    $(document).ready(function() {
+      var profile = JSON.parse(localStorage.getItem('profile'));
+      if (profile) {
+        showLoggedInUser(profile);
+      }
 
+    });
